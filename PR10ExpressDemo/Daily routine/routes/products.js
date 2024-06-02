@@ -95,7 +95,7 @@ function show_l(product, req, res) {
     if (product) {
 
         return (//'id: ' + product.id //+
-            " МОДЕЛЬ ТЕЛЕФОНУ " + product.time + " ВЕРСІЯ ПРОДУКТУ " + product.action);
+            "Час виконання " + product.time + " Івент " + product.action);
     } else {
         res.status(404).send(`Product with id: ${req.params.id} not found`)
     }
