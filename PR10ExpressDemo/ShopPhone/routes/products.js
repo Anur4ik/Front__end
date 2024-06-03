@@ -2,11 +2,14 @@ const express = require("express");
 const Joi = require('joi');
 const Router = express.Router();
 const products = [
-    {id: 1, model: "Iphone", version: "15 Pro Max"},
-    {id: 2, model: "Iphone", version: "14 Pro"},
-    {id: 3, model: "Iphone", version: "13 Pro"},
-    {id: 4, model: "Xiaomi", version: "Poco F5"},
-    {id: 5, model: "Xiaomi", version: "Poco M4 Pro"},
+    {id: 1, model: "Iphone", version: "15 Pro Max",cost:1000},
+    {id: 2, model: "Iphone", version: "14 Pro",cost:2000},
+    {id: 3, model: "Iphone", version: "13 Pro",cost:3000},
+    {id: 4, model: "Xiaomi", version: "Poco F5",cost:4000},
+    {id: 5, model: "Xiaomi", version: "Poco M4 Pro",cost:5000},
+];
+const ordered_product = [
+
 ];
 const productSchema = Joi.object({
     version: Joi.string()
@@ -17,9 +20,15 @@ const productSchema = Joi.object({
         .min(3)
         .required()
 });
+Router.route("/ordered_product")
+    .get((req, res) => {
+        res.send(ordered_product);
+    })
+Router.route("/ordered_product/:id")
 
 Router.route("/")
     .get((req, res) => {
+
         res.send(products);
     })
     .post((req, res) => {
@@ -65,6 +74,18 @@ Router.route("/:id")
         product.model = req.body.model;
         product.version = req.body.version;
         res.send(product);
+    })
+    .post((req, res) => {
+        const productId = req.params.id;
+        const product = products.find(item => item.id == productId);
+        const products_numb = {
+            id: req.params.id,
+            model: product.model,
+            version: product.version,
+            cost: product.cost
+        }
+        ordered_product.push(products_numb)
+        res.send(products_numb);
     })
 
     .delete((req, res) => {

@@ -76,6 +76,6 @@ function delete_same_Product() {
                     console.log(error);
                     alert(error);
                 });
-        });  
+        });
 
 }

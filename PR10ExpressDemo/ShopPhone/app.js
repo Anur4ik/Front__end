@@ -26,6 +26,9 @@ app.get('/about(.html)?', (req, res) => {
 app.get('/products(.html)?', (req, res) => {
     res.sendFile('./views/products.html', {root: __dirname});
  });
+app.get('/order_products(.html)?', (req, res) => {
+    res.sendFile('./views/order_products.html', {root: __dirname});
+});
 
 app.use('/api/products', productsRouter);
 
