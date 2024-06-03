@@ -39,12 +39,15 @@ Router.route("/")
             model: req.body.model,
             version: req.body.version
         }
-
-
         products.push(products_numb)
         res.send(products_numb);
     })
+
 Router.route("/:id")
+    .get((req, res) => {
+    const product = products.find(item => item.id == req.params.id)
+    res.send(show_l(product, req, res));
+})
     .put((req, res) => {
         const product = products.find(item => item.id == req.params.id)
 
@@ -63,10 +66,7 @@ Router.route("/:id")
         product.version = req.body.version;
         res.send(product);
     })
-    .get((req, res) => {
-        const product = products.find(item => item.id == req.params.id)
-        res.send(show_l(product, req, res));
-    })
+
     .delete((req, res) => {
         const product = products.find(item => item.id == req.params.id)
 

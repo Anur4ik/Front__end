@@ -12,11 +12,20 @@ h3{
 .button {
     top:50%;
     font-size: 15px;
-
     border-radius:10px;
     padding:15px;
     min-height:30px;
     min-width: 120px;
+}
+.delete_check {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+}
+.delete_check .delete{
+    background-color:#0a0a23;
+    color: #fff;
 }
 .action{
     background-color:#0a0a23;
@@ -91,7 +100,6 @@ input[type=submit]:hover {
     margin-top: 6px;
 }
 
-/* Clear floats after the columns */
 .row:after {
     content: "";
     display: table;
