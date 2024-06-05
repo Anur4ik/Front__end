@@ -2,15 +2,14 @@ const express = require("express");
 const Joi = require('joi');
 const Router = express.Router();
 const products = [
-    {id: 1, model: "Iphone", version: "15 Pro Max",cost:1000},
-    {id: 2, model: "Iphone", version: "14 Pro",cost:2000},
-    {id: 3, model: "Iphone", version: "13 Pro",cost:3000},
-    {id: 4, model: "Xiaomi", version: "Poco F5",cost:4000},
-    {id: 5, model: "Xiaomi", version: "Poco M4 Pro",cost:5000},
-];
-const ordered_product = [
+    {id: 1, model: "Iphone", version: "15 Pro Max", cost: 1000, amount: 25},
+    {id: 2, model: "Iphone", version: "14 Pro", cost: 2000, amount: 20},
+    {id: 3, model: "Iphone", version: "13 Pro", cost: 3000, amount: 15},
+    {id: 4, model: "Xiaomi", version: "Poco F5", cost: 4000, amount: 10},
+    {id: 5, model: "Xiaomi", version: "Poco M4 Pro", cost: 5000, amount: 2},
 
 ];
+const ordered_product = [];
 const productSchema = Joi.object({
     version: Joi.string()
         .min(1)
@@ -18,6 +17,12 @@ const productSchema = Joi.object({
 
     model: Joi.string()
         .min(3)
+        .required(),
+    cost: Joi.string()
+        .min(1)
+        .required(),
+    amount: Joi.string()
+        .min(1)
         .required()
 });
 Router.route("/ordered_product")
@@ -46,7 +51,9 @@ Router.route("/")
         const products_numb = {
             id: id,
             model: req.body.model,
-            version: req.body.version
+            version: req.body.version,
+            cost: req.body.cost,
+            amount: req.body.amount,
         }
         products.push(products_numb)
         res.send(products_numb);
@@ -54,9 +61,9 @@ Router.route("/")
 
 Router.route("/:id")
     .get((req, res) => {
-    const product = products.find(item => item.id == req.params.id)
-    res.send(show_l(product, req, res));
-})
+        const product = products.find(item => item.id == req.params.id)
+        res.send(show_l(product, req, res));
+    })
     .put((req, res) => {
         const product = products.find(item => item.id == req.params.id)
 
@@ -73,19 +80,27 @@ Router.route("/:id")
         }
         product.model = req.body.model;
         product.version = req.body.version;
+        product.cost = req.body.cost;
+        product.amount = req.body.amount;
         res.send(product);
     })
     .post((req, res) => {
         const productId = req.params.id;
         const product = products.find(item => item.id == productId);
-        const products_numb = {
-            id: req.params.id,
-            model: product.model,
-            version: product.version,
-            cost: product.cost
+        if (product.amount > 0) {
+            const products_numb = {
+                id: req.params.id,
+                model: product.model,
+                version: product.version,
+                cost: product.cost
+            }
+            product.amount--;
+
+            ordered_product.push(products_numb)
+            res.send(products_numb);
+        } else {
+            return res.status(200).json(product);
         }
-        ordered_product.push(products_numb)
-        res.send(products_numb);
     })
 
     .delete((req, res) => {
@@ -99,6 +114,7 @@ Router.route("/:id")
         products.splice(indexOfProduct, 1)
         res.status(200).send(product)
     })
+
 function show_l(product, req, res) {
 
     if (product) {
@@ -109,12 +125,14 @@ function show_l(product, req, res) {
         res.status(404).send(`Product with id: ${req.params.id} not found`)
     }
 }
-function all_list_shop(){
+
+function all_list_shop() {
     let string_list = "";
     for (let j = 0; j < products.length; j++) {
         string_list += products[j].id + "МОДЕЛЬ ТЕЛЕФОНУ " + products[j].model + " ВЕРСІЯ ПРОДУКТУ " + products[j].version + '<br>';
     }
 }
+
 function find(products) {
     let j = 0;
     for (let i = 0; i < products.length; i++) {

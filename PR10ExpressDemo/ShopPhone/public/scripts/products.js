@@ -12,7 +12,7 @@ function fillProductsList(){
             const container = document.getElementById('productsContainer');
             data.forEach(item => {
                 const newLiItem = `<div class="list_items"><li> <input type="checkbox" class="select-item" data-id="${item.id}"><em><input class="button delete" type="button" value="Delete" onclick="deleteProduct(${item.id})"></em>
-                        <em><input class="button update" type="button" value="Update" onclick="updateProduct(${item.id})"></em><span> Модель телефону:<b> ${item.model}</b> Версія: <b>${item.version} </b> </span> </li></div>`;
+                        <em><input class="button update" type="button" value="Update" onclick="updateProduct(${item.id})"></em><span> Модель телефону:<b> ${item.model}</b> Версія: <b>${item.version} </b> Ціна <b>${item.cost}  </b> грн</span>   <b style="color:slateblue">К-СТЬ ТОВАРУ <b style="color:red">${item.amount}</b></b></li></div>`;
                 container.insertAdjacentHTML('beforeend', newLiItem);
             })
             const button ='<div class="delete_check"><input class="button delete" type="button" value="Several Delete" onclick="delete_same_Product()"></div>'
@@ -42,8 +42,10 @@ function deleteProduct(id){
 function updateProduct(id){
     const newProductModel = prompt('На яку МОДЕЛЬ змінюємо?');
     const newProductVersion = prompt('А яка ВЕРСІЯ моделі?');
+    const newProductCost = prompt('А яка Ціна продукту?');
+    const newProductAmount = prompt('А скількі на складі товару?');
 
-    if (!newProductModel || !newProductVersion) {
+    if (!newProductModel || !newProductVersion || !newProductCost || !newProductAmount) {
         return;
     }
     fetch(`/api/products/${id}`, {
@@ -51,7 +53,7 @@ function updateProduct(id){
         headers: {
             'Content-Type': "application/json"
         },
-        body: JSON.stringify({ version: newProductVersion ,model:newProductModel})
+        body: JSON.stringify({ version: newProductVersion ,model:newProductModel, cost:newProductCost,amount:newProductAmount})
     })
         .then(document.location = "/products")
         .catch(error => {
