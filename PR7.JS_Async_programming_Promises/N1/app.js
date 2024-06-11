@@ -5,7 +5,6 @@ function callback1(){
 function callback2(){
     let timerId = setInterval(() => console.log('callBack2'), 3000);
 
-// зупинити через 5 секунд
     setTimeout(() => { clearInterval(timerId); }, 10000);
 }
 mainFun(callback1,callback2);
